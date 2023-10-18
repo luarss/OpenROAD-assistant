@@ -1,0 +1,3 @@
+[submodule "austen/Austen-Works"]
+	path = austen/Austen-Works
+	url = https://github.com/textvs/Austen-Works
