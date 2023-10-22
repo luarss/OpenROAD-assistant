@@ -9,7 +9,18 @@ readme = "README.md"
 python = "^3.10"
 langchain = "^0.0.316"
 jupyter = "^1.0.0"
+scikit-learn = "^1.3.1"
+torch = {version = "^2.1.0+cpu", source = "pytorch"}
+torchvision = {version = "^0.16.0+cpu", source = "pytorch"}
+transformers = "^4.34.1"
+sentence-transformers = "^2.2.2"
+chromadb = "^0.4.14"
 
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core"]
