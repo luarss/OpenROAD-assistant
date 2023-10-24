@@ -15,9 +15,9 @@ poetry shell
 ```
 
 ## Todo
-- Embed database using cpu-friendly methods
 - Connect database to GCP Vertex AI
 - Use Vertex AI to do prompt search. 
+- How to evaluate models for text generation?
 
 
 ## Acknowledgements
