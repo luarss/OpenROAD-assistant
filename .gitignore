@@ -1,5 +1,7 @@
 # Project stuff
 chroma_db/
+tempdata/
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

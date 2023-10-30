@@ -8,6 +8,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+langchain = "^0.0.326"
+jupyter = "^1.0.0"
+gitpython = "^3.1.40"
 
 
 [build-system]
