@@ -1,0 +1,21 @@
+question,answer
+What does the dbSTA module in OpenROAD stand for?,Verilog to DB 
+What does the odb module in OpenROAD stand for?,OpenDB Open Database 
+What does the par module in OpenROAD stand for?,TritonPart: constraints-driven partitioner
+What does the pad module in OpenROAD stand for?,Chip-level connections module based on ICeWall
+What does the pdn module in OpenROAD stand for?,Power distribution network generation
+What does the tap module in OpenROAD stand for?,Tapcell and welltie insertion
+What does the mpl2 module in OpenROAD stand for?,Hierarchical automatic macro placer
+What does the gpl module in OpenROAD stand for?,RePlAce Global Placer
+What does the rsz module in OpenROAD stand for?,Gate resizing and buffering
+What does the dpl module in OpenROAD stand for?,Detailed placement
+What does the cts module in OpenROAD stand for?,Clock Tree synthesis
+What does the grt module in OpenROAD stand for?,FastRoute Global routing
+What does the ant module in OpenROAD stand for?,Antenna check and diode insertion
+What does the drt module in OpenROAD stand for?,TritonRoute detailed routing
+What does the fin module in OpenROAD stand for?,Metal fill insertion
+What does the dft module in OpenROAD stand for?,Design for test
+What does the rcx module in OpenROAD stand for?,OpenRCX parasitic extraction
+What does the sta module in OpenROAD stand for?,OpenSTA timing/power report
+What does the gui module in OpenROAD stand for?,Graphical user interface
+What does the psm module in OpenROAD stand for?,Static IR drop analyser

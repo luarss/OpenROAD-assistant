@@ -16,6 +16,7 @@ torchvision = {version = "^0.16.0+cpu", source = "pytorch"}
 sentence-transformers = "^2.2.2"
 chromadb = "^0.4.15"
 llama-cpp-python = "^0.2.14"
+ragas = "^0.0.19"
 
 
 [[tool.poetry.source]]
