@@ -1,4 +1,4 @@
-question,answer
+question,ground_truths
 What does the dbSTA module in OpenROAD stand for?,Verilog to DB 
 What does the odb module in OpenROAD stand for?,OpenDB Open Database 
 What does the par module in OpenROAD stand for?,TritonPart: constraints-driven partitioner

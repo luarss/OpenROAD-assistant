@@ -1,0 +1,1635 @@
+question,contexts,answer,ground_truths
+What does the dbSTA module in OpenROAD stand for?,Verilog to DB ,\
+\
+The module name "dbSTA" stands for "Database Schema Template Assistant". It is a tool that helps to create and maintain an OpenDB database schema by generating the necessary files and folders based on the user's specifications.,# OpenDB\
+\
+OpenDB is a design database to support tools for physical chip design. It\
+was originally developed by Athena Design Systems. Nefelus\, Inc. acquired\
+the rights to the code and open-sourced it with BSD-3 license in 2019 to support the DARPA\
+OpenROAD project.\
+\
+The structure of OpenDB is based on the text file formats LEF\
+(library) and DEF (design) formats version 5.6.  OpenDB supports a\
+binary file format to save and load the design much faster than using\
+LEF and DEF.\
+\
+OpenDB is written in C++ 98 with standard library style iterators.\
+The classes are designed to be fast enough to base an application on without\
+having to copy them into application-specific structures.\
+\
+\
+## Directory structure\
+\
+```\
+include/odb/db.h - public header for all database classes\
+src/db - private/internal database representations\
+src/lefin - LEF reader\
+src/lefout - LEF writer\
+src/defin - DEF reader\
+src/defout - DEF writer\
+```\
+\
+## Database API\
+\
+We are still working on documenting the APIs.  We have over 1\,800 objects\
+and functions that we are still documenting (for both TCL and Python).\
+**Contributions are very welcome in this effort**. Find starting points below.\
+\
+### TCL\
+\
+After building successfully\, run OpenDB Tcl shell using\
+`../../build/src/odb/src/swig/tcl/odbtcl`. An example usage:\
+\
+```\
+set db [dbDatabase_create]\
+set lef_parser [new_lefin $db true]\
+set tech [lefin_createTech $lef_parser ./src/odb/test/data/gscl45nm.lef]\
+```\
+\
+You can find examples on using the API from Tcl under `test/tcl/` directory.\
+\
+The full set of the Tcl commands exposed can be found under\
+`./build/src/swig/tcl/opendb_wrapper.cpp`. Search for `SWIG_prefix`.\
+\
+\
+### Python\
+\
+After building successfully\, run `openroad -python` to enable the Python\
+interpreter. You can find examples on using the API from Python under\
+`test/python/` directory.\
+\
+To list the full set of the Python classes exposed run `openroad -python`\
+then:\
+```\
+import openroad\
+import odb\
+print('\, '.join(dir(openroad)))\
+print('\, '.join(dir(odb)))\
+```\
+\
+### C++\
+\
+All public database classes are defined in `db.h`. These class definitions\
+provide all functions for examining and modifying the database objects. The\
+database is an object itself\, so multiple database objects can exist\
+simultaneously (no global state).\
+\
+`dbTypes.h` defines types returned by database class member functions.\
+\
+All database objects are in the `odb` namespace.\
+\
+-   `dbChip`\
+-   `dbBlock`\
+-   `dbTech`\
+-   `dbLib`\
+\
+All database objects have a 32bit object identifier accessed with the\
+`dbObject::getOID` base class member function that returns a `uint`. This\
+identifier is preserved across save/restores of the database so it should\
+be used to reference database object by data structures instead of pointers\
+if the reference lifetime is across database save/restores. OIDs allow the\
+database to have exactly the same layout across save/restores.\
+\
+The database distance units are **nanometers** and use the type `uint`.\
+\
+## Example scripts\
+\
+## Regression tests\
+\
+There are a set of regression tests in /test.\
+\
+```\
+./test/regression-tcl.sh\
+./test/regression-py.sh\
+```\
+\
+## Database Internals\
+\
+The internal description included here is paraphrased from Lukas van Ginneken\
+by James Cherry.\
+\
+The database separates the implementation from the interface\, and as a result\,\
+each class becomes two classes\, a public one and a private one. For instance\,\
+`dbInst` has the public API functions\, while class `_dbInst` has the private\
+data fields.
+What does the odb module in OpenROAD stand for?,OpenDB Open Database ,\
+    What does the module name "odb" stand for?,# OpenDB\
+\
+OpenDB is a design database to support tools for physical chip design. It\
+was originally developed by Athena Design Systems. Nefelus\, Inc. acquired\
+the rights to the code and open-sourced it with BSD-3 license in 2019 to support the DARPA\
+OpenROAD project.\
+\
+The structure of OpenDB is based on the text file formats LEF\
+(library) and DEF (design) formats version 5.6.  OpenDB supports a\
+binary file format to save and load the design much faster than using\
+LEF and DEF.\
+\
+OpenDB is written in C++ 98 with standard library style iterators.\
+The classes are designed to be fast enough to base an application on without\
+having to copy them into application-specific structures.\
+\
+\
+## Directory structure\
+\
+```\
+include/odb/db.h - public header for all database classes\
+src/db - private/internal database representations\
+src/lefin - LEF reader\
+src/lefout - LEF writer\
+src/defin - DEF reader\
+src/defout - DEF writer\
+```\
+\
+## Database API\
+\
+We are still working on documenting the APIs.  We have over 1\,800 objects\
+and functions that we are still documenting (for both TCL and Python).\
+**Contributions are very welcome in this effort**. Find starting points below.\
+\
+### TCL\
+\
+After building successfully\, run OpenDB Tcl shell using\
+`../../build/src/odb/src/swig/tcl/odbtcl`. An example usage:\
+\
+```\
+set db [dbDatabase_create]\
+set lef_parser [new_lefin $db true]\
+set tech [lefin_createTech $lef_parser ./src/odb/test/data/gscl45nm.lef]\
+```\
+\
+You can find examples on using the API from Tcl under `test/tcl/` directory.\
+\
+The full set of the Tcl commands exposed can be found under\
+`./build/src/swig/tcl/opendb_wrapper.cpp`. Search for `SWIG_prefix`.\
+\
+\
+### Python\
+\
+After building successfully\, run `openroad -python` to enable the Python\
+interpreter. You can find examples on using the API from Python under\
+`test/python/` directory.\
+\
+To list the full set of the Python classes exposed run `openroad -python`\
+then:\
+```\
+import openroad\
+import odb\
+print('\, '.join(dir(openroad)))\
+print('\, '.join(dir(odb)))\
+```\
+\
+### C++\
+\
+All public database classes are defined in `db.h`. These class definitions\
+provide all functions for examining and modifying the database objects. The\
+database is an object itself\, so multiple database objects can exist\
+simultaneously (no global state).\
+\
+`dbTypes.h` defines types returned by database class member functions.\
+\
+All database objects are in the `odb` namespace.\
+\
+-   `dbChip`\
+-   `dbBlock`\
+-   `dbTech`\
+-   `dbLib`\
+\
+All database objects have a 32bit object identifier accessed with the\
+`dbObject::getOID` base class member function that returns a `uint`. This\
+identifier is preserved across save/restores of the database so it should\
+be used to reference database object by data structures instead of pointers\
+if the reference lifetime is across database save/restores. OIDs allow the\
+database to have exactly the same layout across save/restores.\
+\
+The database distance units are **nanometers** and use the type `uint`.\
+\
+## Example scripts\
+\
+## Regression tests\
+\
+There are a set of regression tests in /test.\
+\
+```\
+./test/regression-tcl.sh\
+./test/regression-py.sh\
+```\
+\
+## Database Internals\
+\
+The internal description included here is paraphrased from Lukas van Ginneken\
+by James Cherry.\
+\
+The database separates the implementation from the interface\, and as a result\,\
+each class becomes two classes\, a public one and a private one. For instance\,\
+`dbInst` has the public API functions\, while class `_dbInst` has the private\
+data fields.
+What does the par module in OpenROAD stand for?,TritonPart: constraints-driven partitioner,\
+// LefDefParser.cpp\
+#include <iostream>\
+#include <string>\
+#include <vector>\
+#include "OpenROAD_API.h"\
+#include <fstream>\
+#include <sstream>\
+#include <algorithm>\
+#include <boost/regex.hpp>\
+#include <boost/filesystem.hpp>\
+#include <boost/tokenizer.hpp>\
+#include <boost/algorithm/string.hpp>\
+#include "par.h" // include par module header file\
+\
+// function to read LefDef file and parse it into OpenROAD objects\
+void lefdefRead(const std::string& filename\, OpenROAD::Design* design) {\
+    std::ifstream ifs(filename);\
+    std::string line;\
+    std::vector<std::string> tokens;\
+    bool is_comment = false;\
+    while (getline(ifs\, line)) {\
+        // remove newline character from end of line\
+        line.erase(std::end(line));\
+        // check if line is a comment\
+        if (line[0] == '*') {\
+            is_comment = true;\
+        } else {\
+            is_comment = false;\
+        }\
+        // tokenize line into words\
+        boost::tokenizer<boost::char_separator<char> > tok(line);\
+        std::copy(tok.begin()\, tok.end()\, back_inserter(tokens));\
+        // parse tokens into OpenROAD objects\
+        if (is_comment) {\
+            continue;\
+        }\
+        if (tokens[0] == "NET") {\
+            design->addNet(tokens);\
+        } else if (tokens[0] == "PWR") {\
+            design->addPwr(tokens);\
+        } else if (tokens[0] == "PLACE") {\
+            design->addPlace(tokens);\
+        } else if (tokens[0] == "CELL") {\
+            design->addCell(tokens);\
+        } else if (tokens[0] == "END") {\
+            break;\
+        } else {\
+            std::cout << "Unknown LefDef command: " << tokens[0] << std::endl;\
+        }\
+    }\
+},Si2 DEF parser 5.8-p027 with CMake support\
+\
+See lefdefReadme.txt
+What does the pad module in OpenROAD stand for?,Chip-level connections module based on ICeWall,\
+```\
+make_io_sites -horizontal_site u_*/PAD -vertical_site u_*/PAD -corner_site u_*/PAD -offset 0 -rotation_horizontal R0 -ring_index 0\
+```,# Chip-level Connections\
+\
+The chip-level connections module in OpenROAD (`pad`) is based on the\
+open-source tool ICeWall. In this utility\, either place an IO ring around the\
+boundary of the chip and connect with either wirebond pads or a bump array.\
+\
+## Commands\
+\
+```{note}\
+- Parameters in square brackets `[-param param]` are optional.\
+- Parameters without square brackets `-param2 param2` are required.\
+```\
+\
+### Placing Terminals\
+\
+In the case where the bond pads are integrated into the padcell\, the IO terminals need to be placed.\
+To place a terminals on the padring\
+\
+```tcl\
+place_io_terminals inst_pins\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `inst_pins` | Instance pins to place the terminals on. |\
+\
+#### Examples\
+```\
+place_io_terminals u_*/PAD\
+place_io_terminals u_*/VDD\
+```\
+\
+### Defining a Bump Array\
+\
+To define a bump array.\
+\
+```tcl\
+make_io_bump_array \
+    -bump master\
+    -origin {x y}\
+    -rows rows\
+    -columns columns\
+    -pitch {x y}\
+    [-prefix prefix]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-bump` | Name of the bump master. |\
+| `-origin` | Origin of the array. |\
+| `-rows` | Number of rows to create. |\
+| `-columns` | Number of columns to create. |\
+| `-pitch` | Pitch of the array. |\
+| `-prefix` | Name prefix for the bump array. The default value is `BUMP_`. |\
+Example usage:\
+\
+```tcl\
+make_io_bump_array -bump BUMP -origin "200 200" -rows 14 -columns 14 -pitch "200 200"\
+```\
+\
+### Removing Entire Bump Array\
+\
+To remove a bump array.\
+\
+```tcl\
+remove_io_bump_array -bump master\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-bump` | Name of the bump master. |\
+\
+Example usage:\
+\
+```tcl\
+remove_io_bump_array -bump BUMP\
+```\
+\
+### Removing a Single Bump Instance\
+\
+To remove a single bump instance.\
+\
+```tcl\
+remove_io_bump instance_name\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `instance_name` | Name of the bump. |\
+\
+### Assigning a Net to a Bump\
+\
+To assign a net to a bump.\
+\
+```tcl\
+assign_io_bump \
+    -net net\
+    [-terminal iterm]\
+    [-dont_route]\
+    instance\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-net` | Net to connect to. |\
+| `-terminal` | Instance terminal to route to. |\
+| `-dont_route` | Flag to indicate that this bump should not be routed\, only perform assignment. |\
+| `instance` | Name of the bump. |\
+\
+Example usage:\
+\
+```tcl\
+assign_io_bump -net p_ddr_addr_9_o BUMP_6_0\
+assign_io_bump -net p_ddr_addr_8_o BUMP_6_2\
+assign_io_bump -net DVSS BUMP_6_4\
+assign_io_bump -net DVDD BUMP_7_3\
+assign_io_bump -net DVDD -terminal u_dvdd/DVDD BUMP_8_3\
+assign_io_bump -net p_ddr_addr_7_o BUMP_7_1\
+assign_io_bump -net p_ddr_addr_6_o BUMP_7_0\
+```\
+\
+### Define IO Rows\
+\
+Define an IO site for the pads to be placed into.\
+\
+```tcl\
+make_io_sites \
+    -horizontal_site site\
+    -vertical_site site\
+    -corner_site site\
+    -offset offset\
+    [-rotation_horizontal rotation]\
+    [-rotation_vertical rotation]\
+    [-rotation_corner rotation]\
+    [-ring_index index]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-horizontal_site` | Name of the site for the horizontal pads (east and west). |\
+| `-vertical_site` | Name of the site for the vertical pads (north and south). |\
+| `-corner_site` | Name of the site for the corner cells. |\
+| `-offset` | Offset from the die edge to place the rows. |\
+| `-rotation_horizontal` | Rotation to apply to the horizontal sites to ensure pads are placed correctly. The default value is `R0`. |\
+| `-rotation_vertical` | Rotation to apply to the vertical sites to ensure pads are placed correctly. The default value is `R0`. |\
+| `-rotation_corner` | Rotation to apply to the corner sites to ensure pads are placed correctly. The default value is `R0`. |\
+| `-ring_index` | Used to specify the index of the ring in case of multiple rings. |\
+\
+Example usage:
+What does the pdn module in OpenROAD stand for?,Power distribution network generation,!#include <stdio.h>\
+\
+int main() {\
+    printf("Hello\, World!\\n");\
+    return 0;\
+}\
+```c\
+```,#### Examples\
+\
+```\
+define_pdn_grid -name main_grid -existing\
+```\
+\
+### Power switch insertion\
+\
+```\
+define_pdn_grid [-name <name>] \\\
+                [-switch_cell <power_switch_cell_name> ] \\\
+                [-power_control <power_constrol_signal_name>] \\\
+                [-power_control_network (STAR|DAISY)]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-switch_cell` | Defines the name of the coarse grain power switch cell to be used for this grid. |\
+| `-power_control` | Defines the name of the power control signal used to control the switching of the inserted power switches. |\
+| `-power_control_network` | Defines the structure of the power control signal network. Choose from STAR\, or DAISY |\
+\
+\
+The `-switch_cell` argument is used to specify the name of a coarse-grain power switch cell that is to be inserted whereever the stdcell rail connects to the rest of the power grid. The mesh layers are associated with the unswitched power net of the voltage domain\, whereas the stdcell rail is associated with the switched power net of the voltage domain. The placement of a power switch cell connects the unswitched power mesh to the switched power rail through a power switch defined by the `define_power_switch_cell` command.\
+\
+The `-power_control` argument specifies the name of the power control signal that must be connected to the inserted power control cells.\
+\
+The `-power_control_network` argument specifies how the power control signal is to be connected to the power switches. If STAR is specified\, then the network is wired as a high-fanout net with the power control signal driving the power control pin on every power switch. If DAISY is specified then the power switches are connected in a daisy-chain configuration - note\, this requires that the power swich defined by the `define_power_switch_cell`  command defines an acknowledge pin for the switch.\
+\
+### Add straps / stripes\
+\
+Defines a pattern of power and ground stripes in a single layer to be added to a power grid.\
+\
+```\
+add_pdn_stripe [-grid grid_name] \\\
+                -layer layer_name \\\
+                -width width_value \\\
+                [-pitch pitch_value] \\\
+                [-spacing spacing_value] \\\
+                [-offset offset_value] \\\
+                [-starts_with (POWER|GROUND)] \\\
+                [-followpins] \\\
+                [-extend_to_boundary] \\\
+                [-extend_to_core_ring] \\\
+                [-snap_to_grid] \\\
+                [-number_of_straps count] \\\
+                [-nets list_of_nets]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-grid` | Specifies the grid to which this stripe definition will be added. (Default: Last grid defined by `define_pdn_grid`) |\
+| `-layer` | Specifies the name of the layer for these stripes |\
+| `-width` | Value for the width of stripe |\
+| `-pitch` | Value for the distance between each power/ground pair |\
+| `-spacing` | Optional specification of the spacing between power/ground pairs within a single pitch. (Default: pitch / 2) |\
+| `-offset` | Value for the offset of the stripe from the lower left corner of the design core area. |\
+| `-starts_with` | Specifies whether the first strap placed will be POWER or GROUND (Default: grid setting) |\
+| `-followpins` | Indicates that the stripe forms part of the stdcell rails\, pitch and spacing are dictated by the stdcell rows\, the `-width` is not needed if it can be determined from the cells |\
+| `-extend_to_boundary` | Extend the stripes to the boundary of the grid |\
+| `-snap_to_grid` | Snap the stripes to the defined routing grid |\
+| `-number_of_straps` | Number of power/ground pairs to add |\
+| `-nets` | Limit straps to just this list of nets |\
+\
+#### Examples\
+```\
+add_pdn_stripe -grid main_grid -layer metal1 -followpins\
+add_pdn_stripe -grid main_grid -layer metal2 -width 0.17 -followpins\
+add pdn_stripe -grid main_grid -layer metal4 -width 0.48 -pitch 56.0 -offset 2 -starts_with GROUND\
+```\
+\
+### Add rings
+What does the tap module in OpenROAD stand for?,Tapcell and welltie insertion,	The module name "TAP" stands for Tape-Out Adaptive Placement.,# Tapcell\
+\
+Tapcell and endcap insertion.\
+\
+## Commands\
+\
+```{note}\
+- Parameters in square brackets `[-param param]` are optional.\
+- Parameters without square brackets `-param2 param2` are required.\
+```\
+\
+### Add Tapcell/Endcap\
+\
+```tcl\
+tapcell \
+    [-tapcell_master tapcell_master]\
+    [-endcap_master endcap_master]\
+    [-distance dist]\
+    [-halo_width_x halo_x]\
+    [-halo_width_y halo_y]\
+    [-tap_nwin2_master tap_nwin2_master]\
+    [-tap_nwin3_master tap_nwin3_master]\
+    [-tap_nwout2_master tap_nwout2_master]\
+    [-tap_nwout3_master tap_nwout3_master]\
+    [-tap_nwintie_master tap_nwintie_master]\
+    [-tap_nwouttie_master tap_nwouttie_master]\
+    [-cnrcap_nwin_master cnrcap_nwin_master]\
+    [-cnrcap_nwout_master cnrcap_nwout_master]\
+    [-incnrcap_nwin_master incnrcap_nwin_master]\
+    [-incnrcap_nwout_master incnrcap_nwout_master]\
+    [-tap_prefix tap_prefix]\
+    [-endcap_prefix endcap_prefix]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-tapcell_master` | Master used as a tapcell. |\
+| `-endcap_master` | Master used as an endcap. |\
+| `-distance` | Distance (in microns) between each tapcell in the checkerboard. |\
+| `-halo_width_x` | Horizontal halo size (in microns) around macros during cut rows. |\
+| `-halo_width_y` | Vertical halo size (in microns) around macros during cut rows. |\
+| `-tap_nwintie_master` | Master cell placed at the top and bottom of|macros and the core area according the row orientation. |\
+| `-tap_nwin2_master` | Master cell placed at the top and bottom of macros and the core area according the row orientation. This master should be smaller than `tap_nwintie_master` |\
+| `-tap_nwin3_master` | Master cell placed at the top and bottom of macros and the core area according the row orientation. This master should be smaller than `tap_nwin2_master`. |\
+| `-tap_nwouttie_master` | Master cell placed at the top and bottom of macros and the core area according the row orientation. |\
+| `-tap_nwout2_master` | Master cell placed at the top and bottom of macros and the core area according the row orientation. This master should be smaller than `tap_nwouttie_master`. |\
+| `-tap_nwout3_master` | Master cell placed at the top and bottom of macros and the core area according the row orientation | This master should be smaller than `tap_nwout2_master`. |\
+| `-incnrcap_nwin_master` | Master cell placed at the corners of macros\, according the row orientation. |\
+| `-incnrcap_nwout_master` | Master cell placed at the corners of macros\, according the row orientation. |\
+| `-cnrcap_nwin_master` | Macro cell placed at the corners the core area according the row orientation. |\
+| `-cnrcap_nwout_master` | Macro cell placed at the corners the core area according the row orientation. |\
+| `-tap_prefix` | Prefix for the tapcell instances. The default value is `TAP_`. |\
+| `-endcap_prefix` | Prefix for the endcaps instances. The default value is `PHY_`. |\
+\
+The figures below show two examples of tapcell insertion. When only the \
+`-tapcell_master` and `-endcap_master` masters are given\, the tapcell placement\
+is similar to Figure 1. When the remaining masters are give\, the tapcell\
+placement is similar to Figure 2.\
+\
+| <img src="./doc/image/tapcell_example1.svg" width=450px> | <img src="./doc/image/tapcell_example2.svg" width=450px> |\
+|:--:|:--:|\
+| Figure 1: Tapcell insertion representation | Figure 2:  Tapcell insertion around macro representation |\
+\
+### Only cutting rows\
+\
+```tcl\
+cut_rows \
+    [-endcap_master endcap_master]\
+    [-halo_width_x halo_x]\
+    [-halo_width_y halo_y]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-endcap_master` | Master used as an endcap. |\
+| `-halo_width_x` | Horizontal halo size (in microns) around macros during cut rows. |\
+| `-halo_width_y` | Vertical halo size (in microns) around macros during cut rows. |\
+\
+### Only adding boundary/endcap cells
+What does the mpl2 module in OpenROAD stand for?,Hierarchical automatic macro placer,\
+\
+In OpenROAD EDA software\, "MPL2" stands for Multi-Processor Layout 2. It is an extension of the Multi-Processor Layout (MPL) module\, which is used for automatic placement and routing of multi-processor systems. MPL2 adds support for hierarchical macro placement and bus planning\, allowing for more complex system designs to be easily created and optimized.,# MPL2 Debug Messages\
+\
+MPL2 debug messages are divided in:\
+- 4 groups according to HierRTLMP flow stages.\
+- 1 group for the special case in which bus planning is used.\
+\
+## Groups\
+\
+### Multilevel Autoclustering\
+- Group Name: `multilevel_autoclustering`\
+- Levels:\
+1. Overall steps of the stage.\
+2. Include in logs:\
+    * Macro signatures;\
+    * Connections of candidate clusters to be merged.\
+\
+### Coarse Shaping\
+- Group Name: `coarse_shaping`\
+- Levels:\
+1. Overall steps of the stage;\
+2. Log clusters' tilings.\
+\
+### Fine Shaping\
+- Group Name: `fine_shaping`\
+- Levels:\
+1. Overall steps of the stage;\
+2. Details of the shapes of each cluster's children.\
+\
+### Hierarchical Macro Placement\
+- Group Name: `hierarchical_macro_placement`\
+- Levels:\
+1. Overall steps of the stage.\
+2. Include in logs:\
+    * Clusters' connections;\
+    * Simulated annealing results for both SoftMacro and HardMacro.\
+\
+### Bus Planning\
+Special case for bus planning with a single level.\
+- Group Name: `bus_planning`
+What does the gpl module in OpenROAD stand for?,RePlAce Global Placer,\
+The module name "gpl" likely stands for "Global Placement". It is a placeholder for an OpenROAD EDA software tool that is used to perform global placement in integrated circuits. Global placement,gpl.setInitialPlaceMaxIter(iter)\
+    gpl.setSkipIoMode(skip_io)\
+    gpl.setTimingDrivenMode(timing_driven)\
+    gpl.setTimingNetWeightMax(weight)\
+\
+There are some useful Python functions located in the file\
+grt/test/grt_aux.py but these are not considered a part of the (final)\
+api and they may change.\
+\
+## FAQs\
+\
+Check out [GitHub discussion](https://github.com/The-OpenROAD-Project/OpenROAD/discussions/categories/q-a?discussions_q=category%3AQ%26A+replace+in%3Atitle)\
+about this tool.\
+\
+## External references\
+\
+-   C.-K. Cheng\, A. B. Kahng\, I. Kang and L. Wang\, "RePlAce: Advancing\
+    Solution Quality and Routability Validation in Global Placement"\, IEEE\
+    Transactions on Computer-Aided Design of Integrated Circuits and Systems\,\
+    38(9) (2019)\, pp. 1717-1730.\
+-   J. Lu\, P. Chen\, C.-C. Chang\, L. Sha\, D. J.-H. Huang\, C.-C. Teng and\
+    C.-K. Cheng\, "ePlace: Electrostatics based Placement using Fast Fourier\
+    Transform and Nesterov's Method"\, ACM TODAES 20(2) (2015)\, article 17.\
+-   J. Lu\, H. Zhuang\, P. Chen\, H. Chang\, C.-C. Chang\, Y.-C. Wong\, L. Sha\,\
+    D. J.-H. Huang\, Y. Luo\, C.-C. Teng and C.-K. Cheng\, "ePlace-MS:\
+    Electrostatics based Placement for Mixed-Size Circuits"\, IEEE TCAD 34(5)\
+    (2015)\, pp. 685-698.\
+-   A. B. Kahng\, J. Li and L. Wang\,   \
+    "Improved Flop Tray-Based Design Implementation for Power Reduction"\,   \
+    IEEE/ACM ICCAD\, 2016\, pp. 20:1-20:8.   \
+\
+-   The timing-driven mode has been implemented by\
+    Mingyu Woo (only available in [legacy repo in standalone\
+    branch](https://github.com/The-OpenROAD-Project/RePlAce/tree/standalone).)\
+-   The routability-driven mode has been implemented by Mingyu Woo.\
+-   Timing-driven mode re-implementation is ongoing with the current\
+    clean-code structure.\
+\
+ ## Authors\
+\
+-   Authors/maintainer since Jan 2020: Mingyu Woo (Ph.D. Advisor:\
+    Andrew. B. Kahng)\
+-   Original open-sourcing of RePlAce: August 2018\, by Ilgweon Kang\
+    (Ph.D. Advisor: Chung-Kuan Cheng)\, Lutong Wang (Ph.D. Advisor: Andrew\
+    B. Kahng)\, and Mingyu Woo (Ph.D. Advisor: Andrew B. Kahng).\
+-   Also thanks to Dr. Jingwei Lu for open-sourcing the previous\
+    ePlace-MS/ePlace project code.\
+\
+## License\
+\
+BSD 3-Clause License. See [LICENSE](LICENSE) file.
+What does the rsz module in OpenROAD stand for?,Gate resizing and buffering,\
+\
+The module name "rsz" in OpenROAD stands for "resizer." It is a tool that allows users to resize the components in their design\, such as cells or blocks\, to better fit within the layout. This can be useful when working with limited space or when optimizing the overall size of the design.,```tcl\
+set_wire_rc -layer metal2\
+report_checks\
+report_tns\
+report_wns\
+report_checks\
+\
+repair_design\
+\
+report_checks\
+report_tns\
+report_wns\
+```\
+\
+## Regression tests\
+\
+There are a set of regression tests in `./test`. For more information\, refer to this [section](../../README.md#regression-tests). \
+\
+Simply run the following script: \
+\
+```shell\
+./test/regression\
+```\
+\
+## Limitations\
+\
+## FAQs\
+\
+Check out [GitHub discussion](https://github.com/The-OpenROAD-Project/OpenROAD/discussions/categories/q-a?discussions_q=category%3AQ%26A+resizer)\
+about this tool.\
+\
+## License\
+\
+BSD 3-Clause License. See [LICENSE](LICENSE) file.
+What does the dpl module in OpenROAD stand for?,Detailed placement,,```tcl\
+optimize_mirroring\
+```\
+\
+No arguments are needed for this function. \
+\
+### Useful Developer Commands\
+\
+If you are a developer\, you might find these useful. More details can be found in the [source file](./src/Opendp.cpp) or the [swig file](./src/Opendp.i).\
+\
+| Command Name | Description |\
+| ----- | ----- |\
+| `detailed_placement_debug` | Debug detailed placement. |\
+| `get_masters_arg` | Get masters from a design. |\
+| `get_inst_bbox` | Get bounding box of an instance. |\
+| `get_inst_grid_bbox` | Get grid bounding box of an instance. |\
+| `format_grid` | Format grid (takes in length `x` and site width `w` as inputs). |\
+| `get_row_site` | Get row site name.\
+\
+## Example scripts\
+\
+Examples scripts demonstrating how to run `dpl` on a sample design of `aes` as follows:\
+\
+```shell\
+./test/aes.tcl\
+```\
+\
+## Regression tests\
+\
+There are a set of regression tests in `./test`. Refer to this [section](../../README.md#regression-tests) for more information.\
+\
+Simply run the following script: \
+\
+```shell\
+./test/regression\
+```\
+\
+## Limitations\
+\
+## FAQs\
+\
+Check out [GitHub discussion](https://github.com/The-OpenROAD-Project/OpenROAD/discussions/categories/q-a?discussions_q=category%3AQ%26A+opendp+in%3Atitle)\
+about this tool.\
+\
+## Authors\
+\
+-   SangGi Do and Mingyu Woo (respective Ph. D. advisors: Seokhyeong Kang\,\
+    Andrew B. Kahng).\
+-   Rewrite and port to OpenDB/OpenROAD by James Cherry\, Parallax Software\
+\
+## References\
+1. Do\, S.\, Woo\, M.\, & Kang\, S. (2019\, May). Fence-region-aware mixed-height standard cell legalization. In Proceedings of the 2019 on Great Lakes Symposium on VLSI (pp. 259-262). [(.pdf)](https://dl.acm.org/doi/10.1145/3299874.3318012)\
+\
+## License\
+\
+BSD 3-Clause License. See [LICENSE](LICENSE) file.
+What does the cts module in OpenROAD stand for?,Clock Tree synthesis,\
+| Switch Name | Description | \
+| ----- | ----- |\
+| `-buf_list` | A list of buffers to be included in the clock tree synthesis. |\
+| `-root_buf` | The root buffer for the clock tree synthesis. If this parameter is omitted\, OpenROAD will automatically select a suitable buffer as the root. |\
+| `-wire_unit` | The wire unit to use for the clock tree synthesis. |\
+| `-clk_nets` | A list of clock nets to be included in the clock tree synthesis. |\
+| `-distance_between_buffers` | The maximum distance between two buffers in the clock tree. |\
+| `-branching_point_buffers_distance` | The minimum distance between two buffers that can be used as branching points in the clock tree. |\
+| `-clustering_exponent` | The exponent used for clustering in the clock tree synthesis. |\
+| `-clustering_unbalance_ratio` | The maximum allowed unbalance ratio in the clustered clock tree. |\
+| `-sink_clustering_enable` | Whether to enable sink clustering in the clock tree synthesis. |\
+| `-sink_clustering_size` | The size of the sink cluster in the clock tree synthesis. |\
+| `-sink_clustering_max_diameter` | The maximum diameter of the sink cluster in the clock tree synthesis. |\
+| `-balance_levels` | Whether to balance the clock tree by level. |\
+| `-num_static_layers` | The number of static layers to use in the clock tree synthesis. |\
+| `-sink_clustering_buffer` | The buffer to be used as the center of the sink cluster in the clock tree synthesis. |,# Clock Tree Synthesis\
+\
+The clock tree synthesis module in OpenROAD (`cts`) is based on TritonCTS\
+2.0. It is available from the `clock_tree_synthesis` command. TritonCTS 2.0\
+performs on-the-fly characterization. Thus\, there is no need to generate\
+characterization data. The on-the-fly characterization feature can be optionally\
+controlled by parameters specified by the `configure_cts_characterization`\
+command. Use `set_wire_rc` command to set the clock routing layer.\
+\
+## Commands\
+\
+```{note}\
+- Parameters in square brackets `[-param param]` are optional.\
+- Parameters without square brackets `-param2 param2` are required.\
+```\
+\
+### Configure CTS Characterization\
+\
+```tcl\
+configure_cts_characterization \
+    [-max_slew max_slew]\
+    [-max_cap max_cap]\
+    [-slew_steps slew_steps]\
+    [-cap_steps cap_steps]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description | \
+| ----- | ----- |\
+| `-max_slew` | Max slew value (in the current time unit) that the characterization will test. If this parameter is omitted\, the code would use max slew value for specified buffer in `buf_list` from liberty file. |\
+| `-max_cap` | Max capacitance value (in the current capacitance unit) that the characterization will test. If this parameter is omitted\, the code would use max cap value for specified buffer in `buf_list` from liberty file. |\
+| `-slew_steps` | Number of steps that `max_slew` will be divided into for characterization. The default value is `12`\, and the allowed values are integers `[0\, MAX_INT]`. |\
+| `-cap_steps` | Number of steps that `max_cap` will be divided into for characterization. The default value is `34`\, and the allowed values are integers `[0\, MAX_INT]`. |\
+\
+### Clock Tree Synthesis\
+\
+```tcl\
+clock_tree_synthesis \
+    -buf_list <list_of_buffers>\
+    [-root_buf root_buf]\
+    [-wire_unit wire_unit]\
+    [-clk_nets <list_of_clk_nets>]\
+    [-distance_between_buffers]\
+    [-branching_point_buffers_distance]\
+    [-clustering_exponent]\
+    [-clustering_unbalance_ratio]\
+    [-sink_clustering_enable]\
+    [-sink_clustering_size cluster_size]\
+    [-sink_clustering_max_diameter max_diameter]\
+    [-balance_levels]\
+    [-num_static_layers]\
+    [-sink_clustering_buffer]\
+```\
+\
+#### Options
+What does the grt module in OpenROAD stand for?,FastRoute Global routing,\
+The "grt" in the function names stands for "Global Routing Toolkit". It is a toolkit for global routing\, which is the process of connecting all the cells in an integrated circuit design. The "gpl" module is a part of the Global Routing Toolkit and contains functions related to global placement\, timing\, and routability analysis.,gpl.setInitialPlaceMaxIter(iter)\
+    gpl.setSkipIoMode(skip_io)\
+    gpl.setTimingDrivenMode(timing_driven)\
+    gpl.setTimingNetWeightMax(weight)\
+\
+There are some useful Python functions located in the file\
+grt/test/grt_aux.py but these are not considered a part of the (final)\
+api and they may change.\
+\
+## FAQs\
+\
+Check out [GitHub discussion](https://github.com/The-OpenROAD-Project/OpenROAD/discussions/categories/q-a?discussions_q=category%3AQ%26A+replace+in%3Atitle)\
+about this tool.\
+\
+## External references\
+\
+-   C.-K. Cheng\, A. B. Kahng\, I. Kang and L. Wang\, "RePlAce: Advancing\
+    Solution Quality and Routability Validation in Global Placement"\, IEEE\
+    Transactions on Computer-Aided Design of Integrated Circuits and Systems\,\
+    38(9) (2019)\, pp. 1717-1730.\
+-   J. Lu\, P. Chen\, C.-C. Chang\, L. Sha\, D. J.-H. Huang\, C.-C. Teng and\
+    C.-K. Cheng\, "ePlace: Electrostatics based Placement using Fast Fourier\
+    Transform and Nesterov's Method"\, ACM TODAES 20(2) (2015)\, article 17.\
+-   J. Lu\, H. Zhuang\, P. Chen\, H. Chang\, C.-C. Chang\, Y.-C. Wong\, L. Sha\,\
+    D. J.-H. Huang\, Y. Luo\, C.-C. Teng and C.-K. Cheng\, "ePlace-MS:\
+    Electrostatics based Placement for Mixed-Size Circuits"\, IEEE TCAD 34(5)\
+    (2015)\, pp. 685-698.\
+-   A. B. Kahng\, J. Li and L. Wang\,   \
+    "Improved Flop Tray-Based Design Implementation for Power Reduction"\,   \
+    IEEE/ACM ICCAD\, 2016\, pp. 20:1-20:8.   \
+\
+-   The timing-driven mode has been implemented by\
+    Mingyu Woo (only available in [legacy repo in standalone\
+    branch](https://github.com/The-OpenROAD-Project/RePlAce/tree/standalone).)\
+-   The routability-driven mode has been implemented by Mingyu Woo.\
+-   Timing-driven mode re-implementation is ongoing with the current\
+    clean-code structure.\
+\
+ ## Authors\
+\
+-   Authors/maintainer since Jan 2020: Mingyu Woo (Ph.D. Advisor:\
+    Andrew. B. Kahng)\
+-   Original open-sourcing of RePlAce: August 2018\, by Ilgweon Kang\
+    (Ph.D. Advisor: Chung-Kuan Cheng)\, Lutong Wang (Ph.D. Advisor: Andrew\
+    B. Kahng)\, and Mingyu Woo (Ph.D. Advisor: Andrew B. Kahng).\
+-   Also thanks to Dr. Jingwei Lu for open-sourcing the previous\
+    ePlace-MS/ePlace project code.\
+\
+## License\
+\
+BSD 3-Clause License. See [LICENSE](LICENSE) file.
+What does the ant module in OpenROAD stand for?,Antenna check and diode insertion,,# Antenna Rule Checker\
+\
+This tool checks antenna violations and generates a report to indicate\
+violated nets. See LEF/DEF 5.8 Language Reference\, Appendix C\,\
+"Calculating and Fixing Process Antenna Violations" (p.389) \
+for a [description](https://coriolis.lip6.fr/doc/lefdef/lefdefref/lefdefref.pdf) of antenna violations.\
+\
+This is an example of the detailed and simple reports of the antenna checker:\
+\
+| <img src="./doc/images/ant_report_print.png" width=500px> |\
+\
+Abbreviations Index:\
+\
+-   `PAR`: Partial Area Ratio\
+-   `CAR`: Cumulative Area Ratio\
+-   `Area`: Gate Area\
+-   `S. Area`: Side Diffusion Area\
+-   `C. Area`: Cumulative Gate Area\
+-   `C. S. Area`: Cumulative Side (Diffusion) Area\
+\
+Antenna violations can be repaired after global routing with the `repair_design` command.\
+\
+## Commands\
+\
+```{note}\
+- Parameters in square brackets `[-param param]` are optional.\
+- Parameters without square brackets `-param2 param2` are required.\
+```\
+\
+### Check Antennas\
+\
+```tcl\
+check_antennas \
+    [-net net] \
+    [-verbose]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-verbose` | Report all antenna calculations for violating nets. |\
+| `-net` | Check antennas on the specified net. |\
+\
+## Regression tests\
+\
+There are a set of regression tests in `./test`. For more information\, refer to this [section](../../README.md#regression-tests).\
+\
+Simply run the following script:\
+\
+```shell\
+./test/regression\
+```\
+\
+## Limitations\
+\
+## FAQs\
+\
+Check out [GitHub discussion](https://github.com/The-OpenROAD-Project/OpenROAD/discussions/categories/q-a?discussions_q=category%3AQ%26A+antenna+in%3Atitle)\
+about this tool.\
+\
+## Algorithm\
+\
+| <img src="./doc/images/example_ant.png" width=400px> | <img src="./doc/images/step1.png" width=400px> |\
+|:--:|:--:|\
+| Antenna Checker Algorithm: WireGraph Example | Step 1: (a) Start from the root node (ITerm) using upper Via to find a node for a new wire. (b) Save the ITerm area for cumulative gate/diffusion area. |\
+| <img src="./doc/images/step2.png" width=400px> | <img src="./doc/images/step3.png" width=400px> |\
+| Step 2: From the node of the wire\, find all the nodes in the wire through segment wires and find the "root" node of this wire. | Step 3: (a) From the "root" node of the wire\, along the outgoing segment edge that goes to other nodes belonging to this wire\, calculate the area of this wire. (b) Then\, find all the ITerms below these nodes\, except for the root node (directly use an ITerm or lower Vias to find ITerms for lower metals). (c) Sum up the areas of all the ITerms found with the cumulative areas and calculate the PAR of this wire. (d) Add the PAR value and the wire info (layer\, Index) into the PAR table. Add the new area to the cumulative areas. |\
+| <img src="./doc/images/step4.png" width=400px> | <img src="./doc/images/step5.png" width=400px> |\
+| Step 4: Find all the upper Vias on this wire (for all the nodes on this wire)\, and go to the higher-level metal. | Step 5: Repeat Steps 2 and 3 for new-found upper-level wires. |\
+| <img src="./doc/images/step6.png" width=400px> | <img src="./doc/images/step7.png" width=400px> |\
+| Step 6: Repeat Steps 4 and 5 until we reach a wire that cannot have upper Vias for its nodes (highest-level metal). | Step 7: Pick up another ITerm as a root node and repeat Steps 1 to 6\, skipping the wires already in the PAR table. Repeat this for all the ITerms to get a whole PAR table. |\
+| <img src="./doc/images/step8.png" width=400px> |\
+| Step 8: (a) Pick up a gate ITerm and a node of a wire (e.g.\, M4\,1). Find possible paths that connect them\, look up the PAR value of the wires along these paths\, and add them up to get the CAR of the (gate\, wire) pair. (b) Compare to the AntennaRule to see if the CAR violates the rules. (c) Check this for all (gate\, wire) pairs. |\
+\
+## License\
+\
+BSD 3-Clause License. See [LICENSE](../../LICENSE) file.
+What does the drt module in OpenROAD stand for?,TritonRoute detailed routing,\
+define\\_pdn\\_ring -name <ring\\_name> \\\
+-layer layer\\_name \\\
+-width width\\_value \\\
+-pitch pitch\\_value \\\
+-spacing spacing\\_value \\\
+-offset offset\\_value \\\
+-starts\\_with (POWER|GROUND) \\\
+-followpins \\\
+-extend\\_to\\_boundary \\\
+-snap\\_to\\_grid \\\
+-number\\_of\\_rings count \\\
+-nets list\\_of\\_nets \\\
+-straps list\\_of\\_stripes,#### Examples\
+\
+```\
+define_pdn_grid -name main_grid -existing\
+```\
+\
+### Power switch insertion\
+\
+```\
+define_pdn_grid [-name <name>] \\\
+                [-switch_cell <power_switch_cell_name> ] \\\
+                [-power_control <power_constrol_signal_name>] \\\
+                [-power_control_network (STAR|DAISY)]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-switch_cell` | Defines the name of the coarse grain power switch cell to be used for this grid. |\
+| `-power_control` | Defines the name of the power control signal used to control the switching of the inserted power switches. |\
+| `-power_control_network` | Defines the structure of the power control signal network. Choose from STAR\, or DAISY |\
+\
+\
+The `-switch_cell` argument is used to specify the name of a coarse-grain power switch cell that is to be inserted whereever the stdcell rail connects to the rest of the power grid. The mesh layers are associated with the unswitched power net of the voltage domain\, whereas the stdcell rail is associated with the switched power net of the voltage domain. The placement of a power switch cell connects the unswitched power mesh to the switched power rail through a power switch defined by the `define_power_switch_cell` command.\
+\
+The `-power_control` argument specifies the name of the power control signal that must be connected to the inserted power control cells.\
+\
+The `-power_control_network` argument specifies how the power control signal is to be connected to the power switches. If STAR is specified\, then the network is wired as a high-fanout net with the power control signal driving the power control pin on every power switch. If DAISY is specified then the power switches are connected in a daisy-chain configuration - note\, this requires that the power swich defined by the `define_power_switch_cell`  command defines an acknowledge pin for the switch.\
+\
+### Add straps / stripes\
+\
+Defines a pattern of power and ground stripes in a single layer to be added to a power grid.\
+\
+```\
+add_pdn_stripe [-grid grid_name] \\\
+                -layer layer_name \\\
+                -width width_value \\\
+                [-pitch pitch_value] \\\
+                [-spacing spacing_value] \\\
+                [-offset offset_value] \\\
+                [-starts_with (POWER|GROUND)] \\\
+                [-followpins] \\\
+                [-extend_to_boundary] \\\
+                [-extend_to_core_ring] \\\
+                [-snap_to_grid] \\\
+                [-number_of_straps count] \\\
+                [-nets list_of_nets]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-grid` | Specifies the grid to which this stripe definition will be added. (Default: Last grid defined by `define_pdn_grid`) |\
+| `-layer` | Specifies the name of the layer for these stripes |\
+| `-width` | Value for the width of stripe |\
+| `-pitch` | Value for the distance between each power/ground pair |\
+| `-spacing` | Optional specification of the spacing between power/ground pairs within a single pitch. (Default: pitch / 2) |\
+| `-offset` | Value for the offset of the stripe from the lower left corner of the design core area. |\
+| `-starts_with` | Specifies whether the first strap placed will be POWER or GROUND (Default: grid setting) |\
+| `-followpins` | Indicates that the stripe forms part of the stdcell rails\, pitch and spacing are dictated by the stdcell rows\, the `-width` is not needed if it can be determined from the cells |\
+| `-extend_to_boundary` | Extend the stripes to the boundary of the grid |\
+| `-snap_to_grid` | Snap the stripes to the defined routing grid |\
+| `-number_of_straps` | Number of power/ground pairs to add |\
+| `-nets` | Limit straps to just this list of nets |\
+\
+#### Examples\
+```\
+add_pdn_stripe -grid main_grid -layer metal1 -followpins\
+add_pdn_stripe -grid main_grid -layer metal2 -width 0.17 -followpins\
+add pdn_stripe -grid main_grid -layer metal4 -width 0.48 -pitch 56.0 -offset 2 -starts_with GROUND\
+```\
+\
+### Add rings
+What does the fin module in OpenROAD stand for?,Metal fill insertion,\
+| Switch Name | Description |\
+| --- | --- |\
+| `-setup`\, `-hold` | Repair setup or hold violations respectively. Default is both. |\
+| `-setup_margin`\, `-hold_margin` | Add a margin to the setup or hold check respectively. The default value is `0`\, the allowed values are integers `[0\, 100]`. |\
+| `-allow_setup_violations` | Allows some setup violations. This option is only used if neither `-setup_margin` nor `-hold_margin` are specified. |\
+| `-repair_tns tns_end_percent` | Repair timing nets that end at the top of a clock net section (TNS). The default value is `0`\, the allowed values are integers `[0\, 100]`. |\
+| `-max_utilization` | Defines the percentage of core area used. |\
+| `-max_buffer_percent` | Defines the maximum buffer usage. |\
+| `-verbose` | Enable verbose logging of repair progress. |,The `set_dont_touch` command prevents the resizer commands from\
+modifying instances or nets.\
+\
+```tcl\
+set_dont_touch instances_nets\
+unset_dont_touch instances_nets\
+```\
+\
+### Buffer Ports\
+\
+The `buffer_ports -inputs` command adds a buffer between the input and its\
+loads.  The `buffer_ports -outputs` adds a buffer between the port driver\
+and the output port. Inserting buffers on input and output ports makes\
+the block input capacitances and output drives independent of the block\
+internals.\
+\
+```tcl\
+buffer_ports \
+    [-inputs] \
+    [-outputs] \
+    [-max_utilization util]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-inputs`\, `-outputs` | Insert a buffer between the input and load\, output and load respectively. The default behavior is `-inputs` and `-outputs` set if neither is specified. |\
+| `-max_utilization` | Defines the percentage of core area used. |\
+\
+### Remove Buffers\
+\
+Use the `remove_buffers` command to remove buffers inserted by synthesis. This\
+step is recommended before using `repair_design` so that there is more flexibility\
+in buffering nets. \
+\
+```tcl\
+remove_buffers\
+```\
+\
+### Repair Design\
+\
+The `repair_design` command inserts buffers on nets to repair max slew\, max\
+capacitance and max fanout violations\, and on long wires to reduce RC delay in\
+the wire. It also resizes gates to normalize slews.  Use `estimate_parasitics\
+-placement` before `repair_design` to estimate parasitics considered\
+during repair. Placement-based parasitics cannot accurately predict\
+routed parasitics\, so a margin can be used to "over-repair" the design\
+to compensate. \
+\
+```tcl\
+repair_design \
+    [-max_wire_length max_length]\
+    [-slew_margin slew_margin]\
+    [-cap_margin cap_margin]\
+    [-max_utilization util]\
+    [-verbose]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-max_wire_length` | Maximum length of wires (in microns)\, defaults to a value that minimizes the wire delay for the wire RC values specified by `set_wire_rc`. |\
+| `-slew_margin` | Add a slew margin. The default value is `0`\, the allowed values are integers `[0\, 100]`. |\
+| `-cap_margin` | Add a capactitance margin. The default value is `0`\, the allowed values are integers `[0\, 100]`. |\
+| `-max_utilization` | Defines the percentage of core area used. |\
+| `-verbose` | Enable verbose logging on progress of the repair. |\
+\
+### Repair Tie Fanout\
+\
+The `repair_tie_fanout` command connects each tie high/low load to a copy\
+of the tie high/low cell.\
+\
+```tcl\
+repair_tie_fanout \
+    [-separation dist]\
+    [-verbose]\
+    lib_port\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-separation` | Tie high/low insts are separated from the load by this value (Liberty units\, usually microns). |\
+| `-verbose` | Enable verbose logging of repair progress. |\
+| `lib_port` | Tie high/low port\, which can be a library/cell/port name or object returned by `get_lib_pins`. |\
+\
+### Repair Timing\
+\
+The `repair_timing` command repairs setup and hold violations.  It\
+should be run after clock tree synthesis with propagated clocks.\
+Setup repair is done before hold repair so that hold repair does not\
+cause setup checks to fail.\
+\
+The worst setup path is always repaired.  Next\, violating paths to\
+endpoints are repaired to reduced the total negative slack. \
+\
+```tcl\
+repair_timing \
+    [-setup]\
+    [-hold]\
+    [-setup_margin setup_margin]\
+    [-hold_margin hold_margin]\
+    [-allow_setup_violations]\
+    [-repair_tns tns_end_percent]\
+    [-max_utilization util]\
+    [-max_buffer_percent buffer_percent]\
+    [-verbose]\
+```\
+\
+#### Options
+What does the dft module in OpenROAD stand for?,Design for test,#\
+\
+The module name "dft" stands for "Design for Testability".,# Metal fill\
+\
+This module inserts floating metal fill shapes to meet metal density\
+design rules while obeying DRC constraints. It is driven by a `json`\
+configuration file.\
+\
+## Commands\
+\
+```{note}\
+- Parameters in square brackets `[-param param]` are optional.\
+- Parameters without square brackets `-param2 param2` are required.\
+```\
+\
+### Density Fill\
+\
+```tcl\
+density_fill\
+    [-rules rules_file]\
+    [-area {lx ly ux uy}]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description | \
+| ----- | ----- |\
+| `-rules` | Specify `json` rule file. |\
+| `-area` | Optional. If not specified\, the core area will be used. |\
+\
+## Example scripts\
+\
+The rules `json` file controls fill and you can see an example\
+[here](https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts/blob/master/flow/platforms/sky130hd/fill.json).\
+\
+The schema for the `json` is:\
+\
+```json\
+{\
+  "layers": {\
+    "<group_name>": {\
+      "layers": "<list of integer gds layers>"\,\
+      "names": "<list of name strings>"\,\
+      "opc": {\
+        "datatype":  "<list of integer gds datatypes>"\,\
+        "width":   "<list of widths in microns>"\,\
+        "height":   "<list of heightsin microns>"\,\
+        "space_to_fill": "<real: spacing between fills in microns>"\,\
+        "space_to_non_fill": "<real: spacing to non-fill shapes in microns>"\,\
+        "space_line_end": "<real: spacing to end of line in microns>"\
+      }\,\
+      "non-opc": {\
+        "datatype":  "<list of integer gds datatypes>"\,\
+        "width":   "<list of widths in microns>"\,\
+        "height":   "<list of heightsin microns>"\,\
+        "space_to_fill": "<real: spacing between fills in microns>"\,\
+        "space_to_non_fill": "<real: spacing to non-fill shapes in microns>"\
+      }\
+    }\, ...\
+  }\
+}\
+```\
+\
+The `opc` section is optional depending on your process.\
+\
+The width/height lists are effectively parallel arrays of shapes to try\
+in left to right order (generally larger to smaller).\
+\
+The layer grouping is for convenience. For example in some technologies many\
+layers have similar rules so it is convenient to have a `Mx`\, `Cx` group.\
+\
+This all started out in `klayout` so there are some obsolete fields that the\
+parser accepts but ignores (e.g.\, `space_to_outline`).\
+\
+## Regression tests\
+\
+There are a set of regression tests in `./test`. For more information\, refer to this [section](../../README.md#regression-tests). \
+\
+Simply run the following script: \
+\
+```shell\
+./test/regression\
+```\
+\
+## Limitations\
+\
+## FAQs\
+\
+Check out [GitHub discussion](https://github.com/The-OpenROAD-Project/OpenROAD/discussions/categories/q-a?discussions_q=category%3AQ%26A+metal%20fill+in%3Atitle)\
+about this tool.\
+\
+## License\
+\
+BSD 3-Clause License. See [LICENSE](LICENSE) file.
+What does the rcx module in OpenROAD stand for?,OpenRCX parasitic extraction,▅\
+\
+The module name "rcx" stands for "Roadmap Calibration Extraction." It refers to a software package developed by Synopsys\, Inc.\, which is used in the design of integrated circuits. The software generates resistance and capacitance tables that are used during the extraction process to accurately model the behavior of the circuit at different process corners.,# Extraction Rules Generation Flow for OpenRCX\
+\
+This flow generates the RC tech file for OpenRCX. The RC tech file provides\
+resistance and capacitance tables used for RC extraction for a specific process\
+corner.\
+\
+# The flow involves:\
+\
+A. Running OpenRCX `generate_patterns.tcl` to generate layout patterns.\
+\
+  - Input: tech LEF\
+  - Output: `patterns.def`\, `patterns.v`\
+  - Script: `generate_patterns.tcl`\
+  - Desc: OpenRCX generates many pattern geometries to model various types\
+    of capacitance and resistance (i.e.\, multi-conductor) geometric configurations.\
+\
+B. Running your favorite extraction tool (i.e.\, reference extractor) to extract\
+    parasitics of the layout patterns.\
+\
+  - Input: `patterns.def`\, `patterns.v` (if required)\, and additional files\
+    required by the reference extractor.\
+  - Output: `patterns.spef`\
+  - Script: Not provided\
+  - Desc: Extract parasitics of the patterns generated by OpenRCX using a reference\
+    extractor. This one-time step provides the parasitics of various types of pattern\
+    geometries as reference for fitted per-unit length R\, C calculation.\
+\
+C. Running OpenRCX to convert `patterns.spef` to RC tech file.\
+\
+  - Input: `patterns.spef`\
+  - Output: RC tech file\
+  - Script: `generate_rules.tcl`\
+  - Desc: OpenRCX takes the `.spef` from the reference extractor and performs\
+    calculations to produce capacitance and resistance tables for a wide range of\
+    wire geometries. The output of this flow is a custom RC tech file for\
+    OpenRCX.\
+\
+D. Benchmarking - test the accuracy of OpenRCX on the patterns layout.\
+  - Input: `patterns.def` and RC tech file\
+  - Output: `rcx.spef`\, `diff_spef.out`\
+  - Script: `ext_patterns.tcl`\
+  - Desc: Perform parasitic extraction on pattern layout for the calibration\
+    using the generated RC tech file. OpenRCX then compares the extracted\
+    parasitics with the golden parasitics that had been extracted by the reference extractor\
+    in Step (B) above.\
+\
+## How to run:\
+\
+1. Go to OpenRCX home directory (`./OpenROAD/src/rcx`).\
+\
+2. Navigate to calibration folder `cd calibration`\
+\
+3. Modify the `user_env.tcl` script in the script directory.\
+\
+  - TECH_LEF: points to the directory of the tech LEF\
+  - PROCESS_NODE: the technology node\
+  - extRules: the name and the location of the OpenRCX tech file\
+\
+4. Run the executable script `run.sh` --> run Steps (A) through (D) of the flow above.\
+\
+  - `source run.sh` or `./run.sh`\
+\
+5. The OpenRCX RC tech file can be found in the directory that is specified in the extRules variable.
+What does the sta module in OpenROAD stand for?,OpenSTA timing/power report,\
+\
+The STA stands for "Static Analysis". It is a type of analysis that is performed on a digital circuit design to ensure that it meets certain performance and reliability requirements. The STA module in OpenROAD EDA software is used to perform static timing analysis on a design\, which involves analyzing the timing of signals in the circuit and determining whether they meet the required timing constraints. Other types of analysis that can be performed using the STA module include power analysis\, signal integrity analysis\, and functional verification.,#### Examples\
+\
+```\
+define_pdn_grid -name main_grid -existing\
+```\
+\
+### Power switch insertion\
+\
+```\
+define_pdn_grid [-name <name>] \\\
+                [-switch_cell <power_switch_cell_name> ] \\\
+                [-power_control <power_constrol_signal_name>] \\\
+                [-power_control_network (STAR|DAISY)]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-switch_cell` | Defines the name of the coarse grain power switch cell to be used for this grid. |\
+| `-power_control` | Defines the name of the power control signal used to control the switching of the inserted power switches. |\
+| `-power_control_network` | Defines the structure of the power control signal network. Choose from STAR\, or DAISY |\
+\
+\
+The `-switch_cell` argument is used to specify the name of a coarse-grain power switch cell that is to be inserted whereever the stdcell rail connects to the rest of the power grid. The mesh layers are associated with the unswitched power net of the voltage domain\, whereas the stdcell rail is associated with the switched power net of the voltage domain. The placement of a power switch cell connects the unswitched power mesh to the switched power rail through a power switch defined by the `define_power_switch_cell` command.\
+\
+The `-power_control` argument specifies the name of the power control signal that must be connected to the inserted power control cells.\
+\
+The `-power_control_network` argument specifies how the power control signal is to be connected to the power switches. If STAR is specified\, then the network is wired as a high-fanout net with the power control signal driving the power control pin on every power switch. If DAISY is specified then the power switches are connected in a daisy-chain configuration - note\, this requires that the power swich defined by the `define_power_switch_cell`  command defines an acknowledge pin for the switch.\
+\
+### Add straps / stripes\
+\
+Defines a pattern of power and ground stripes in a single layer to be added to a power grid.\
+\
+```\
+add_pdn_stripe [-grid grid_name] \\\
+                -layer layer_name \\\
+                -width width_value \\\
+                [-pitch pitch_value] \\\
+                [-spacing spacing_value] \\\
+                [-offset offset_value] \\\
+                [-starts_with (POWER|GROUND)] \\\
+                [-followpins] \\\
+                [-extend_to_boundary] \\\
+                [-extend_to_core_ring] \\\
+                [-snap_to_grid] \\\
+                [-number_of_straps count] \\\
+                [-nets list_of_nets]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-grid` | Specifies the grid to which this stripe definition will be added. (Default: Last grid defined by `define_pdn_grid`) |\
+| `-layer` | Specifies the name of the layer for these stripes |\
+| `-width` | Value for the width of stripe |\
+| `-pitch` | Value for the distance between each power/ground pair |\
+| `-spacing` | Optional specification of the spacing between power/ground pairs within a single pitch. (Default: pitch / 2) |\
+| `-offset` | Value for the offset of the stripe from the lower left corner of the design core area. |\
+| `-starts_with` | Specifies whether the first strap placed will be POWER or GROUND (Default: grid setting) |\
+| `-followpins` | Indicates that the stripe forms part of the stdcell rails\, pitch and spacing are dictated by the stdcell rows\, the `-width` is not needed if it can be determined from the cells |\
+| `-extend_to_boundary` | Extend the stripes to the boundary of the grid |\
+| `-snap_to_grid` | Snap the stripes to the defined routing grid |\
+| `-number_of_straps` | Number of power/ground pairs to add |\
+| `-nets` | Limit straps to just this list of nets |\
+\
+#### Examples\
+```\
+add_pdn_stripe -grid main_grid -layer metal1 -followpins\
+add_pdn_stripe -grid main_grid -layer metal2 -width 0.17 -followpins\
+add pdn_stripe -grid main_grid -layer metal4 -width 0.48 -pitch 56.0 -offset 2 -starts_with GROUND\
+```\
+\
+### Add rings
+What does the gui module in OpenROAD stand for?,Graphical user interface,\
+\
+The module name "gui" in OpenROAD stands for Graphical User Interface. It is a module that provides a graphical interface for interacting with OpenROAD\, allowing users to create layouts and perform various operations using a graphical representation of the design.,# Graphical User Interface\
+\
+The graphical user interface can be access by launching OpenROAD with ``-gui`` or by opening it from the command-line with ``gui::show``.\
+\
+## Commands\
+\
+### Add buttons to the toolbar\
+\
+```\
+create_toolbar_button [-name name]\
+                      -text button_text\
+                      -script tcl_script \
+                      [-echo]\
+```\
+\
+Returns: name of the new button\, either ``name`` or ``buttonX``.\
+\
+Options description:\
+- ``button_text``: The text to put on the button.\
+- ``tcl_script``: The tcl script to evaluate when the button is pressed.\
+- ``name``: (optional) name of the button\, used when deleting the button.\
+- ``echo``: (optional) indicate that the commands in the ``tcl_script`` should be echoed in the log.\
+\
+To remove the button: \
+\
+```\
+gui::remove_toolbar_button name\
+```\
+\
+### Add items to the menubar\
+\
+```\
+create_menu_item [-name name]\
+                 [-path menu_path]\
+                 -text item_text\
+                 -script tcl_script\
+                 [-shortcut key_shortcut] \
+                 [-echo]\
+```\
+\
+Returns: name of the new item\, either ``name`` or ``actionX``.\
+\
+Options description:\
+- ``item_text``: The text to put on the item.\
+- ``tcl_script``: The tcl script to evaluate when the button is pressed.\
+- ``name``: (optional) name of the item\, used when deleting the item.\
+- ``menu_path``: (optional) Menu path to place the new item in (hierarchy is separated by /)\, defaults to "Custom Scripts"\, but this can also be "Tools" or "New menu/New submenu".\
+- ``key_shortcut``: (optional) key shortcut to trigger this item.\
+- ``echo``: (optional) indicate that the commands in the ``tcl_script`` should be echoed in the log.\
+\
+To remove the item: \
+\
+```\
+gui::remove_menu_item name\
+```\
+\
+\
+### Save screenshot of layout\
+\
+This command can be both be used when the GUI is active and not active.\
+\
+```\
+save_image [-resolution microns_per_pixel]\
+           [-area {x0 y0 x1 y1}]\
+           [-width width]\
+           [-display_option {option value}]\
+           filename\
+```\
+\
+Options description:\
+- ``filename`` path to save the image to.\
+- ``x0\, y0`` first corner of the layout area (in microns) to be saved\, default is to save what is visible on the screen unless called when gui is not active and then it selected the whole block.\
+- ``x1\, y1`` second corner of the layout area (in microns) to be saved\, default is to save what is visible on the screen unless called when gui is not active and then it selected the whole block.\
+- ``microns_per_pixel`` resolution in microns per pixel to use when saving the image\, default will match what the GUI has selected.\
+- ``width`` width of the output image in pixels\, default will be computed from the resolution. Cannot be used with ``-resolution``.\
+- ``option`` specific setting for a display option to show or hide specific elements. For example\, to hide metal1 ``-display_option {Layers/metal1 false}``\, to show routing tracks ``-display_option {Tracks/Pref true}``\, or to show everthing ``-display_option {* true}``.\
+\
+### Save screenshot of clock trees\
+\
+```\
+save_clocktree_image filename\
+                     -clock clock_name\
+                     [-width width]\
+                     [-height height]\
+                     [-corner corner]\
+```\
+\
+Options description:\
+- ``filename`` path to save the image to.\
+- ``-clock`` name of the clock to save the clocktree for.\
+- ``-corner`` name of the timing corner to save the clocktree for\, default to the first corner defined.\
+- ``-height`` height of the image in pixels\, defaults to the height of the GUI widget.\
+- ``-width`` width of the image in pixels\, defaults to the width of the GUI widget.\
+\
+### Selecting objects\
+\
+```\
+select -type object_type\
+       [-name glob_pattern]\
+       [-filter attribute=value]\
+       [-case_insensitive]\
+       [-highlight group]\
+```\
+\
+Returns: number of objects selected.
+What does the psm module in OpenROAD stand for?,Static IR drop analyser,#include <stdio.h>\
+\
+int main() {\
+  int i;\
+  \
+  for (i = 0; i < 10; i++) {\
+    printf("%d "\, i);\
+  }\
+  \
+  return 0;\
+}\
+```,#### Examples\
+\
+```\
+define_pdn_grid -name main_grid -existing\
+```\
+\
+### Power switch insertion\
+\
+```\
+define_pdn_grid [-name <name>] \\\
+                [-switch_cell <power_switch_cell_name> ] \\\
+                [-power_control <power_constrol_signal_name>] \\\
+                [-power_control_network (STAR|DAISY)]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-switch_cell` | Defines the name of the coarse grain power switch cell to be used for this grid. |\
+| `-power_control` | Defines the name of the power control signal used to control the switching of the inserted power switches. |\
+| `-power_control_network` | Defines the structure of the power control signal network. Choose from STAR\, or DAISY |\
+\
+\
+The `-switch_cell` argument is used to specify the name of a coarse-grain power switch cell that is to be inserted whereever the stdcell rail connects to the rest of the power grid. The mesh layers are associated with the unswitched power net of the voltage domain\, whereas the stdcell rail is associated with the switched power net of the voltage domain. The placement of a power switch cell connects the unswitched power mesh to the switched power rail through a power switch defined by the `define_power_switch_cell` command.\
+\
+The `-power_control` argument specifies the name of the power control signal that must be connected to the inserted power control cells.\
+\
+The `-power_control_network` argument specifies how the power control signal is to be connected to the power switches. If STAR is specified\, then the network is wired as a high-fanout net with the power control signal driving the power control pin on every power switch. If DAISY is specified then the power switches are connected in a daisy-chain configuration - note\, this requires that the power swich defined by the `define_power_switch_cell`  command defines an acknowledge pin for the switch.\
+\
+### Add straps / stripes\
+\
+Defines a pattern of power and ground stripes in a single layer to be added to a power grid.\
+\
+```\
+add_pdn_stripe [-grid grid_name] \\\
+                -layer layer_name \\\
+                -width width_value \\\
+                [-pitch pitch_value] \\\
+                [-spacing spacing_value] \\\
+                [-offset offset_value] \\\
+                [-starts_with (POWER|GROUND)] \\\
+                [-followpins] \\\
+                [-extend_to_boundary] \\\
+                [-extend_to_core_ring] \\\
+                [-snap_to_grid] \\\
+                [-number_of_straps count] \\\
+                [-nets list_of_nets]\
+```\
+\
+#### Options\
+\
+| Switch Name | Description |\
+| ----- | ----- |\
+| `-grid` | Specifies the grid to which this stripe definition will be added. (Default: Last grid defined by `define_pdn_grid`) |\
+| `-layer` | Specifies the name of the layer for these stripes |\
+| `-width` | Value for the width of stripe |\
+| `-pitch` | Value for the distance between each power/ground pair |\
+| `-spacing` | Optional specification of the spacing between power/ground pairs within a single pitch. (Default: pitch / 2) |\
+| `-offset` | Value for the offset of the stripe from the lower left corner of the design core area. |\
+| `-starts_with` | Specifies whether the first strap placed will be POWER or GROUND (Default: grid setting) |\
+| `-followpins` | Indicates that the stripe forms part of the stdcell rails\, pitch and spacing are dictated by the stdcell rows\, the `-width` is not needed if it can be determined from the cells |\
+| `-extend_to_boundary` | Extend the stripes to the boundary of the grid |\
+| `-snap_to_grid` | Snap the stripes to the defined routing grid |\
+| `-number_of_straps` | Number of power/ground pairs to add |\
+| `-nets` | Limit straps to just this list of nets |\
+\
+#### Examples\
+```\
+add_pdn_stripe -grid main_grid -layer metal1 -followpins\
+add_pdn_stripe -grid main_grid -layer metal2 -width 0.17 -followpins\
+add pdn_stripe -grid main_grid -layer metal4 -width 0.48 -pitch 56.0 -offset 2 -starts_with GROUND\
+```\
+\
+### Add rings
