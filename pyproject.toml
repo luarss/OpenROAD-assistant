@@ -13,10 +13,10 @@ jupyter = "^1.0.0"
 gitpython = "^3.1.40"
 torch = {version = "^2.1.0+cpu", source = "pytorch"}
 torchvision = {version = "^0.16.0+cpu", source = "pytorch"}
-sentence-transformers = "^2.2.2"
 chromadb = "^0.4.15"
 llama-cpp-python = "^0.2.14"
 ragas = "^0.0.19"
+sentence-transformers = {git = "https://github.com/Muennighoff/sentence-transformers.git", rev = "sgpt_poolings_specb"}
 
 
 [[tool.poetry.source]]
