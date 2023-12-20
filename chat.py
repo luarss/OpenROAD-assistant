@@ -1,19 +1,26 @@
 from llama_cpp import Llama
 from langchain.prompts import ChatPromptTemplate
 import argparse
+import pandas as pd
+from datetime import datetime
 from utils import load_docs_from_jsonl
 from embed import load_existing_embeddings, generate_new_embeddings
+
+current_time = datetime.now()
+file_name = current_time.strftime("%Y_%m_%d_%H_%M_%S") # Creates a filename with year, month, day, hour, minute, and second
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--gen-embeddings", action="store_true", help="Regenerate embeddings")
 parser.add_argument("--max-tokens", type=int, help="max_tokens hyperparameter", default = 200)
 parser.add_argument("--temp", type=float, help="temperature hyperparameter", default = 0.2)
 parser.add_argument("--n-ctx", type=int, help="n_ctx hyperparameter", default = 8000)
+parser.add_argument("--filename", type=str, help="output (.json) filename", default= file_name)
 args = parser.parse_args()
 gen_embed = args.gen_embeddings
 max_tokens = args.max_tokens
 temp = args.temp
 n_ctx = args.n_ctx
+filename = args.filename
 
 def create_completion(db, question,
                         max_tokens, temperature, n_ctx):
@@ -62,8 +69,22 @@ if gen_embed:
     db, retriever = generate_new_embeddings(chunks)
 else:
     db, retriever = load_existing_embeddings()
-question = "What function does the OpenROAD module name odb serve?"
-context, output = create_completion(db, question, max_tokens, temp, n_ctx)
-print(context)
-print(output["choices"][0]["text"])
 
+tools = ['odb', 'par', 'pad',
+         'pdn', 'tap', 'mpl2', 'gpl',
+         'rsz', 'dpl', 'cts', 'grt',
+         'ant', 'drt', 'fin', 'dft',
+         'rcx', 'sta', 'gui', 'psm']
+final_contexts, final_answers = [], []
+for tool in tools:
+    question = f"What function does the OpenROAD module name {tool} serve?"
+    context, answer = create_completion(db, question, max_tokens, temp, n_ctx)
+    answer = answer["choices"][0]["text"]
+    final_contexts.append(context)
+    final_answers.append(answer)
+
+df = pd.read_csv('evaluation/or2.csv')
+df["answer"] = final_answers
+df["contexts"] = final_contexts
+df = df.filter(["question", "contexts", "answer", "ground_truths"])
+df.to_json(f'evaluation/{filename}.json')
