@@ -5,11 +5,13 @@ Objective is to build a LLM Chatbot that is able to answer user queries for Open
 ## Quickstart
 
 ```
-# select chunking strategy
-python chunk.py --chunk-size 200 --overlap 20
+# clone current repo 
+git clone https://github.com/luarss/OpenROAD-assistant.git
+git checkout colab standalone
 
-# regenerate embeddings (if loading old embedding)
-python chat.py --gen-embeddings --max-tokens 200 --temp 0.2 --n-ctx 8000
+# standalone running 
+!python chat.py 
+
 ```
 
 ## TODOs

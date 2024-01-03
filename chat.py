@@ -34,6 +34,7 @@ def create_completion(db, question,
     print(final_prompt)
     
     # Step 7: Use llama-cpp-python as a prototype. 
+    ### REPLACE LINES 38 - 58 WITH YOUR LOGIC FOR GENERATING OUTPUT. `final_prompt` is what you want to feed into your LLM pipeline.
     llm = Llama(model_path="../llama.cpp/models/mistral-instruct/ggml-model-q4_0.gguf", n_ctx = n_ctx)
     output = llm.create_completion(final_prompt,
                                    suffix=None,
@@ -63,18 +64,19 @@ TRIPLE_QUOTES = """\n\"\"\"\n"""
 PRE_PROMPT_QUERY = "Pay attention and remember the information below, which will help to answer the question or imperative after the context ends.\n"
 PROMPT_QUERY = "\nAccording to only the information in the document sources provided within the context above, "
 
-PROMPT_TEMPLATE = """%s%s{context}%s%s{question}"""%(TRIPLE_QUOTES, PRE_PROMPT_QUERY, TRIPLE_QUOTES, PROMPT_QUERY)
+PROMPT_TEMPLATE = """%s%s%s{context}%s%s{question}%s"""%(MISTRAL_START, TRIPLE_QUOTES, PRE_PROMPT_QUERY, TRIPLE_QUOTES, PROMPT_QUERY, MISTRAL_END)
 if gen_embed: 
     chunks = load_docs_from_jsonl("./tempdata/data.jsonl")
     db, retriever = generate_new_embeddings(chunks)
 else:
     db, retriever = load_existing_embeddings()
 
-tools = ['odb', 'par', 'pad',
-         'pdn', 'tap', 'mpl2', 'gpl',
-         'rsz', 'dpl', 'cts', 'grt',
-         'ant', 'drt', 'fin', 'dft',
-         'rcx', 'sta', 'gui', 'psm']
+tools = ['odb']
+#tools = ['odb', 'par', 'pad',
+#         'pdn', 'tap', 'mpl2', 'gpl',
+#         'rsz', 'dpl', 'cts', 'grt',
+#         'ant', 'drt', 'fin', 'dft',
+#         'rcx', 'sta', 'gui', 'psm']
 final_contexts, final_answers = [], []
 for tool in tools:
     question = f"What function does the OpenROAD module name {tool} serve?"
